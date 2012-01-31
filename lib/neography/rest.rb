@@ -342,7 +342,7 @@ module Neography
     end
 
     def execute_query(query, params = {})
-      options = { :body => {:query => query, :params => params}.to_json, :headers => {'Content-Type' => 'application/json'} }
+      options = { :body => {:query => sanitize(query), :params => params}.to_json, :headers => {'Content-Type' => 'application/json'} }
       result = post("/cypher", options)
     end
 
@@ -362,6 +362,10 @@ module Neography
     end
 
     private
+
+    def sanitize(query)
+      query.strip.gsub(/\s+/, ' ')
+    end
 
     def get_batch(args)
       case args[0]
